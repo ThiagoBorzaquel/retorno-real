@@ -8,13 +8,13 @@
 <meta name="keywords" content="rentabilidade real, calculadora de patrimônio, TILT, inflação patrimonial, family office, retorno líquido, retorno em dólar">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0e1a2b">
-<link rel="canonical" href="https://SEU-USUARIO.github.io/retorno-real/">
+<link rel="canonical" href="https://thiagoborzaquel.github.io/retorno-real/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Retorno Real — quanto seu patrimônio realmente cresceu?">
 <meta property="og:description" content="Nominal, líquido, real (TILT), em USD e patrimônio real consolidado.">
-<meta property="og:url" content="https://SEU-USUARIO.github.io/retorno-real/"><meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Retorno Real","url":"https://SEU-USUARIO.github.io/retorno-real/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"pt-BR","description":"Calculadora de rentabilidade real do patrimônio considerando custos, impostos, inflação patrimonial e câmbio."}</script>
+<meta property="og:url" content="https://thiagoborzaquel.github.io/retorno-real/"><meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Retorno Real","url":"https://thiagoborzaquel.github.io/retorno-real/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"pt-BR","description":"Calculadora de rentabilidade real do patrimônio considerando custos, impostos, inflação patrimonial e câmbio."}</script>
 <style>
 :root{--bg:#f6f4ef;--card:#fff;--tx:#17202e;--mu:#6a7384;--bd:#e2ddd2;--up:#0a8f4e;--dn:#c8323f;--ac:#8a6a1f}
 :root[data-theme=dark]{--bg:#0c1522;--card:#131f31;--tx:#eaeef5;--mu:#93a0b6;--bd:#24334b;--up:#2ed17f;--dn:#ff5d6c;--ac:#d9b45a}
@@ -36,6 +36,7 @@ td small{display:block;color:var(--mu);font-size:11px}.up{color:var(--up)}.dn{co
 .wf .tot{font-weight:700}.note{font-size:12px;color:var(--mu);margin-top:10px}
 footer{color:var(--mu);font-size:12px;padding:20px 0 40px}
 @media print{header,.form,.acts,#th{display:none}.cols{display:block}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.metric{border:1px solid var(--bd);border-radius:10px;padding:10px}.metric b{display:block;font-size:18px}.chart{height:170px;border-left:1px solid var(--bd);border-bottom:1px solid var(--bd);display:flex;align-items:end;gap:4px;padding:8px 4px 0}.chart i{display:block;min-width:6px;flex:1;border-radius:3px 3px 0 0;background:var(--ac)}.chart i.neg{background:var(--dn)}@media(max-width:860px){.grid3,.metrics{grid-template-columns:1fr 1fr}.w{padding:0 10px}.box{padding:12px}}@media(max-width:520px){.grid3,.metrics,.r2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -51,6 +52,7 @@ footer{color:var(--mu);font-size:12px;padding:20px 0 40px}
  <label>Patrimônio no início (R$)</label><input id="ini" inputmode="decimal" placeholder="10.000.000">
  <div id="g1"><label>Patrimônio no fim, bruto (R$)</label><input id="fin" inputmode="decimal" placeholder="11.800.000">
  <label>Aportes líquidos no período (R$, negativo = retiradas)</label><input id="apo" inputmode="decimal" placeholder="0"></div>
+ <div class="r2"><div><label>Momento dos aportes/retiradas</label><select id="timing"><option value="0.5">Distribuído no período</option><option value="0">No início</option><option value="1">No fim</option></select></div><div><label>Número de aportes/retiradas</label><input id="flows" type="number" min="1" value="1"></div></div>
  <div id="g2" hidden><label>Rentabilidade bruta no período (%)</label><input id="ret" inputmode="decimal" placeholder="15"></div>
  <h2>Taxas e custos <span class="st">(médias de mercado; ajuste)</span></h2>
  <div class="r2"><div><label>Gestão / adm. / family office (% a.a.)</label><input id="tx" inputmode="decimal" value="1,0"></div><div><label>Custódia e outros (% a.a.)</label><input id="cu" inputmode="decimal" value="0,15"></div>
@@ -137,6 +139,74 @@ document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme:dark)")
    $("ds").textContent="Dados públicos até "+MAXM.split("-").reverse().join("/")}}
  if(!$("mf").value){const d=new Date();d.setMonth(d.getMonth()-1);const k=mk(d.getFullYear(),d.getMonth()+1);$("mf").value=k;let s=k;for(let i=0;i<11;i++)s=prev(s);$("mi").value=s}
  run()})();
+</script>
+<script>
+function runImproved(){
+ const s=$("mi").value,e=$("mf").value,out=$("out");
+ const say=t=>{out.innerHTML=`<div class="box st">${t}</div>`};
+ if(!s||!e||s>e)return say("Escolha um período válido (início até fim).");
+ const ms=months(s,e),n=ms.length,y=n/12,A=auto(s,e);
+ [["o_ipca","ipca"],["o_cpi","cpi"],["o_fx","fx"],["o_cdi","cdi"]].forEach(([id,k])=>$(id).placeholder=isNaN(A[k])?"informe":f2(A[k]*100));
+ const ov=(id,k)=>{const v=pn($(id).value);return isNaN(v)?A[k]:v/100};
+ const ipca=ov("o_ipca","ipca"),cpi=ov("o_cpi","cpi"),fx=ov("o_fx","fx"),cdi=ov("o_cdi","cdi");
+ let I=pn($("ini").value),F,C=pn($("apo").value)||0;
+ if(!($("apo").value.trim()) )C=0;
+ if($("modo").value=="val"){F=pn($("fin").value)}else{const r=pn($("ret").value);if(isNaN(r))return say("Informe a rentabilidade bruta do período.");F=I*(1+r/100)+C}
+ if(!(I>0)||isNaN(F))return say("Informe o patrimônio inicial e o final (ou a rentabilidade).");
+ const model=$("model").value,need=model=="comp"?[ipca,cpi,fx]:model=="ipca"?[ipca,fx]:[cpi,fx];
+ if(need.some(isNaN))return say("Faltam dados de referência para este período. Preencha as premissas de mercado.");
+ const timingValue=parseFloat($("timing").value),timing=isNaN(timingValue)?0.5:timingValue,flowCount=Math.max(1,parseInt($("flows").value)||1);
+ const base=I+C*(1-timing),gain=F-I-C;
+ const fee=(pn($("tx").value)||0)/100+(pn($("cu").value)||0)/100;
+ const nf=$("nf").checked,ni=$("ni").checked;
+ const custos=nf?0:fee*y*base;
+ const excess=Math.max(0,gain-base*(isNaN(cdi)?0:cdi));
+ const perf=nf?0:(pn($("pf").value)||0)/100*excess;
+ const pre=gain-custos-perf;
+ const ir=ni?0:Math.max(0,pre)*(pn($("irr").value)||0)/100;
+ const Fn=Math.max(0,I+C+pre-ir);
+ const rb=base>0?(F-I-C)/base:NaN,rl=base>0?(Fn-I-C)/base:NaN;
+ const prem=(pn($("prem").value)||0)/100,w=(pn($("w").value)||0)/100;
+ const domestic=(1+ipca)*Math.pow(1+prem,y)-1;
+ const foreign=(1+cpi)*(1+fx)-1;
+ let tilt=model=="comp"?(1-w)*domestic+w*foreign:model=="ipca"?domestic:(pn($("tm").value)||0)/100;
+ if(!isFinite(tilt)||tilt<=-1)return say("Informe uma inflação/TILT válida.");
+ const real=r=>(1+r)/(1+tilt)-1,annual=r=>n>=12?Math.pow(1+r,1/y)-1:NaN;
+ const rr=real(rl),rrI=real(ipca),ru=(1+rl)/(1+fx)-1,rru=(1+ru)/(1+cpi)-1;
+ const targetI=I*Math.pow(1+tilt,y);
+ const targetC=C*Math.pow(1+tilt,Math.max(0,y*(1-timing)));
+ const target=targetI+targetC;
+ const surplus=Fn-target;
+ const cl=x=>x>=0?"up":"dn",P=x=>isFinite(x)?f2(x*100)+"%":"—",B=x=>"R$ "+x.toLocaleString("pt-BR",{maximumFractionDigits:0});
+ const ok=rr>=0;
+ const fmt=(a,r,sub)=>`<tr><td>${a}${sub?`<small>${sub}</small>`:""}</td><td class="${cl(r)}">${P(r)}</td><td>${P(annual(r))}</td></tr>`;
+ const wf=[["Retorno bruto",rb,1],["Custos e taxas",-custos/base,1],["Taxa de performance",-perf/base,1],["Imposto de renda",-ir/base,1],["Retorno líquido",rl,1],["Retorno real",rr,1]];
+ const mx=Math.max(...wf.map(x=>Math.abs(x[1]||0)),.0001);
+ const bars=wf.map(([a,v,t])=>`<div class="${t?"tot":""}">${a}</div><div class="bar"><i style="${v>=0?"left:50%":"right:50%"};width:${Math.abs(v)/mx*50}%;background:var(--${v>=0?"up":"dn"})"></i></div><div class="${cl(v)}">${P(v)}</div>`).join("");
+ const chartValues=Array.from({length:n},(_,i)=>{const k=(i+1)/n;const value=I*Math.pow(1+rl,k)+C*Math.pow(1+rl,k*(1-timing))-I-C*k;return value/base});
+ const maxChart=Math.max(...chartValues.map(Math.abs),.0001);
+ const chart=chartValues.map(v=>`<i class="${v<0?"neg":""}" title="${P(v)}" style="height:${Math.max(3,Math.abs(v)/maxChart*100)}%"></i>`).join("");
+ const txt=`${ok?"Seu patrimônio cresceu":"Seu patrimônio perdeu"} ${P(Math.abs(rr))} em poder de compra no período (${n} meses). Nominal bruto: ${P(rb)}; líquido: ${P(rl)}; real: ${P(rr)}. Patrimônio final líquido: ${B(Fn)}.`;
+ const report={periodo:{inicio:s,fim:e,meses:n},patrimonio:{inicial:I,finalBruto:F,aportes:C,finalLiquido:Fn},retornos:{bruto:rb,liquido:rl,real:rr,emUSD:ru,realEmUSD:rru},custos:{taxas:custos,performance:perf,ir:ir},referencias:{ipca,cpi,fx,cdi,tilt},inflacaoPatrimonial:tilt};
+ out.innerHTML=`<div class="v ${ok?"up":"dn"}">${ok?"✔ Você enriqueceu de verdade":"✖ Você ficou mais pobre em termos reais"}: ${P(rr)}<small>${surplus>=0?"Ganho":"Perda"} real de ${B(Math.abs(surplus))} contra o patrimônio protegido pela inflação. TILT acumulado: ${P(tilt)}.</small></div>
+ <div class="metrics"><div class="metric"><span class="st">Patrimônio líquido</span><b>${B(Fn)}</b></div><div class="metric"><span class="st">Meta de preservação</span><b>${B(target)}</b></div><div class="metric"><span class="st">Retorno líquido anual</span><b>${P(annual(rl))}</b></div></div>
+ <div class="box" style="margin-top:14px"><h2 style="margin-top:0">Indicadores</h2><table><tr><th>Indicador</th><th>Período</th><th>Ao ano</th></tr>
+ ${fmt("Retorno nominal bruto",rb,"ganho excluindo aportes")}${fmt("Retorno líquido",rl,"após taxas, performance e IR")}${fmt("Retorno real (TILT)",rr,"poder de compra")}${fmt("Retorno em USD",ru,"líquido em dólares")}${fmt("Retorno real em USD",rru,"deflacionado pelo CPI EUA")}</table></div>
+ <div class="box" style="margin-top:14px"><h2 style="margin-top:0">Fluxos e custos</h2><div class="wf">${bars}</div><div class="chart" aria-label="Evolução estimada mensal">${chart}</div>  <p class="note">Base média considerada: ${B(base)}; ${flowCount===1?"1 fluxo":flowCount+" fluxos"} estimado(s). Patrimônio final bruto ${B(F)} menos custos ${B(custos+perf)} e IR ${B(ir)}.</p></div>
+ <div class="box" style="margin-top:14px"><h2 style="margin-top:0">Referências</h2><table><tr><th>Indicador</th><th>Acumulado</th><th>Retorno real líquido</th></tr>
+ <tr><td>IPCA</td><td>${P(ipca)}</td><td class="${cl(rrI)}">${P(rrI)}</td></tr><tr><td>Inflação patrimonial (TILT)</td><td>${P(tilt)}</td><td class="${cl(rr)}">${P(rr)}</td></tr><tr><td>CPI EUA</td><td>${P(cpi)}</td><td>—</td></tr><tr><td>USD/BRL</td><td>${P(fx)}</td><td>—</td></tr><tr><td>CDI</td><td>${P(cdi)}</td><td>${isNaN(cdi)?"—":P(gain/base-cdi)}</td></tr></table>
+ <div class="acts" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn p" id="cp2">Copiar resumo</button><button class="btn" id="csv">Exportar CSV</button><button class="btn" id="json">Exportar JSON</button><button class="btn" onclick="print()">Imprimir / PDF</button></div></div>`;
+ $("cp2").onclick=()=>navigator.clipboard?.writeText(txt);
+ $("csv").onclick=()=>{
+  const rows=[["Indicador","Valor"],["Retorno bruto",rb],["Retorno liquido",rl],["Retorno real",rr],["Patrimonio final liquido",Fn],["Meta de preservacao",target],["TILT",tilt],["IPCA",ipca],["CPI EUA",cpi],["USD_BRl",fx],["CDI",cdi]];
+  download("retorno-real.csv","text/csv",rows.map(r=>r.join(";")).join("\n"));
+ };
+ $("json").onclick=()=>download("retorno-real.json","application/json",JSON.stringify(report,null,2));
+}
+function download(name,type,text){const b=new Blob([text],{type:type+";charset=utf-8"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+document.addEventListener("input",()=>runImproved());
+document.addEventListener("change",()=>runImproved());
+window.addEventListener("load",()=>setTimeout(runImproved,150));
 </script>
 </body>
 </html>
