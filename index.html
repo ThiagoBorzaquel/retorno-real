@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retorno Real — Calculadora de rentabilidade real do patrimônio (inflação, câmbio, custos e IR)</title>
+<meta name="description" content="Descubra quanto seu patrimônio realmente cresceu: retorno nominal, líquido de custos e impostos, real pela inflação patrimonial (TILT), em dólar e em poder de compra.">
+<meta name="keywords" content="rentabilidade real, calculadora de patrimônio, TILT, inflação patrimonial, family office, retorno líquido, retorno em dólar">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0e1a2b">
+<link rel="canonical" href="https://SEU-USUARIO.github.io/retorno-real/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Retorno Real — quanto seu patrimônio realmente cresceu?">
+<meta property="og:description" content="Nominal, líquido, real (TILT), em USD e patrimônio real consolidado.">
+<meta property="og:url" content="https://SEU-USUARIO.github.io/retorno-real/"><meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Retorno Real","url":"https://SEU-USUARIO.github.io/retorno-real/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"pt-BR","description":"Calculadora de rentabilidade real do patrimônio considerando custos, impostos, inflação patrimonial e câmbio."}</script>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#17202e;--mu:#6a7384;--bd:#e2ddd2;--up:#0a8f4e;--dn:#c8323f;--ac:#8a6a1f}
+:root[data-theme=dark]{--bg:#0c1522;--card:#131f31;--tx:#eaeef5;--mu:#93a0b6;--bd:#24334b;--up:#2ed17f;--dn:#ff5d6c;--ac:#d9b45a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.w{max-width:1180px;margin:0 auto;padding:0 14px}header{background:var(--card);border-bottom:1px solid var(--bd)}
+.top{display:flex;align-items:center;gap:10px;padding:12px 0}.logo{font:800 19px Georgia,serif}.logo b{color:var(--ac)}.sp{flex:1}
+h1{font:700 26px Georgia,serif;margin:18px 0 4px}h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin:18px 0 8px}
+.st{font-size:12px;color:var(--mu)}button,input,select{font:inherit;color:var(--tx)}
+.btn{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:7px 12px;cursor:pointer}.btn.p{background:var(--ac);border-color:var(--ac);color:#fff}
+.cols{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:18px;align-items:start}@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+label{display:block;font-size:13px;color:var(--mu);margin:10px 0 3px}input,select{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 10px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ck{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:13px}.ck input{width:auto}
+details{margin-top:12px;border-top:1px solid var(--bd);padding-top:8px}summary{cursor:pointer;font-weight:600}
+.v{border-radius:12px;padding:16px;margin-bottom:14px;color:#fff;font-size:17px}.v.up{background:var(--up)}.v.dn{background:var(--dn)}.v small{display:block;opacity:.9;font-size:13px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 6px;border-bottom:1px solid var(--bd);text-align:right}th:first-child,td:first-child{text-align:left}th{font-size:12px;color:var(--mu);font-weight:600}
+td small{display:block;color:var(--mu);font-size:11px}.up{color:var(--up)}.dn{color:var(--dn)}
+.wf{display:grid;grid-template-columns:130px 1fr 70px;gap:6px 8px;align-items:center;font-size:13px}.bar{height:14px;background:var(--bg);border-radius:4px;position:relative}.bar i{position:absolute;top:0;bottom:0;border-radius:4px}
+.wf .tot{font-weight:700}.note{font-size:12px;color:var(--mu);margin-top:10px}
+footer{color:var(--mu);font-size:12px;padding:20px 0 40px}
+@media print{header,.form,.acts,#th{display:none}.cols{display:block}}
+</style>
+</head>
+<body>
+<header><div class="w top"><span class="logo">🧮 Retorno <b>Real</b></span><span class="sp"></span><span class="st" id="ds"></span><button class="btn" id="th" title="Tema">◐</button></div></header>
+<main class="w">
+<h1>Quanto seu patrimônio realmente cresceu?</h1>
+<p class="st">Rentabilidade nominal ≠ enriquecimento real. Informe seus números e veja o resultado depois de custos, impostos, inflação patrimonial e câmbio. Tudo roda no seu navegador: nada é enviado nem salvo.</p>
+<div class="cols">
+<section class="box form">
+ <label>Como você quer informar?</label>
+ <select id="modo"><option value="val">Patrimônio inicial e final</option><option value="pct">Patrimônio inicial e rentabilidade (%)</option></select>
+ <div class="r2"><div><label>De (mês)</label><input type="month" id="mi"></div><div><label>Até (mês)</label><input type="month" id="mf"></div></div>
+ <label>Patrimônio no início (R$)</label><input id="ini" inputmode="decimal" placeholder="10.000.000">
+ <div id="g1"><label>Patrimônio no fim, bruto (R$)</label><input id="fin" inputmode="decimal" placeholder="11.800.000">
+ <label>Aportes líquidos no período (R$, negativo = retiradas)</label><input id="apo" inputmode="decimal" placeholder="0"></div>
+ <div id="g2" hidden><label>Rentabilidade bruta no período (%)</label><input id="ret" inputmode="decimal" placeholder="15"></div>
+ <h2>Taxas e custos <span class="st">(médias de mercado; ajuste)</span></h2>
+ <div class="r2"><div><label>Gestão / adm. / family office (% a.a.)</label><input id="tx" inputmode="decimal" value="1,0"></div><div><label>Custódia e outros (% a.a.)</label><input id="cu" inputmode="decimal" value="0,15"></div>
+ <div><label>Performance (% sobre o excedente ao CDI)</label><input id="pf" inputmode="decimal" value="0"></div><div><label>IR efetivo sobre o ganho (%)</label><input id="irr" inputmode="decimal" value="15"></div></div>
+ <div class="ck"><input type="checkbox" id="nf"><label style="margin:0">Meus números já são líquidos de taxas</label></div>
+ <div class="ck"><input type="checkbox" id="ni"><label style="margin:0">Meus números já são líquidos de IR</label></div>
+ <details open><summary>Inflação patrimonial</summary>
+  <label>Modelo</label><select id="model"><option value="comp">TILT estimado (75% IPCA com prêmio + 25% CPI EUA em R$)</option><option value="ipca">IPCA + prêmio</option><option value="man">TILT informado por mim</option></select>
+  <div class="r2"><div id="gw"><label>Despesas em moeda forte (%)</label><input id="w" inputmode="decimal" value="25"></div><div id="gp"><label>Prêmio s/ IPCA (p.p. a.a.)</label><input id="prem" inputmode="decimal" value="0,6"></div></div>
+  <div id="gm" hidden><label>TILT acumulado no período (%)</label><input id="tm" inputmode="decimal" placeholder="ex.: 7,2"></div>
+  <p class="note">O TILT oficial é da Turim (Carta 46). Aqui é uma aproximação com dados públicos; se você recebe o TILT, use "informado por mim".</p></details>
+ <details><summary>Premissas de mercado (preenchidas automaticamente)</summary>
+  <div class="r2"><div><label>IPCA no período (%)</label><input id="o_ipca" inputmode="decimal"></div><div><label>CPI EUA no período (%)</label><input id="o_cpi" inputmode="decimal"></div>
+  <div><label>Variação USD/BRL (%)</label><input id="o_fx" inputmode="decimal"></div><div><label>CDI no período (%)</label><input id="o_cdi" inputmode="decimal"></div></div>
+  <p class="note">Deixe em branco para usar os dados públicos (BCB, FRED/BLS, Yahoo Finance) ou digite para sobrescrever.</p></details>
+</section>
+<section id="out"><div class="box st">Preencha o patrimônio e o período para ver o resultado.</div></section>
+</div>
+</main>
+<footer class="w">Ferramenta informativa e educacional; não constitui recomendação de investimento, tributária ou jurídica. Taxas, alíquotas e o TILT são aproximações: confirme com seus assessores. Fontes: Banco Central do Brasil (IPCA, CDI), FRED/BLS (CPI EUA), Yahoo Finance (USD/BRL). Inspirado na Carta Turim nº 46.</footer>
+<script>
+const $=id=>document.getElementById(id);let REF=null,MAXM="";
+const pn=v=>{v=String(v==null?"":v).trim();if(!v)return NaN;v=v.replace(/[R$\s]/g,"");if(v.includes(","))v=v.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(\.\d{3})+$/.test(v))v=v.replace(/\./g,"");return parseFloat(v)};
+const f2=x=>x.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const P=x=>isFinite(x)?f2(x*100)+"%":"—",B=x=>"R$ "+x.toLocaleString("pt-BR",{maximumFractionDigits:0}),cl=x=>x>=0?"up":"dn";
+const mk=(y,m)=>y+"-"+String(m).padStart(2,"0"),prev=k=>{let[y,m]=k.split("-").map(Number);return --m?mk(y,m):mk(y-1,12)};
+const next=k=>{let[y,m]=k.split("-").map(Number);return m==12?mk(y+1,1):mk(y,m+1)};
+function months(a,b){const o=[];for(let k=a;k<=b&&o.length<600;k=next(k))o.push(k);return o}
+const last=o=>Object.keys(o||{}).sort().pop()||"";
+function auto(s,e){const R={ipca:NaN,cdi:NaN,cpi:NaN,fx:NaN};if(!REF)return R;const ms=months(s,e),p=prev(s);
+ const acc=o=>ms.every(k=>o&&o[k]!=null)?ms.reduce((a,k)=>a*(1+o[k]/100),1)-1:NaN;
+ R.ipca=acc(REF.ipca);R.cdi=acc(REF.cdi);
+ if(REF.cpi[e]&&REF.cpi[p])R.cpi=REF.cpi[e]/REF.cpi[p]-1;if(REF.fx[e]&&REF.fx[p])R.fx=REF.fx[e]/REF.fx[p]-1;return R}
+function run(){
+ const s=$("mi").value,e=$("mf").value,out=$("out");
+ const say=t=>{out.innerHTML=`<div class="box st">${t}</div>`};
+ if(!s||!e||s>e)return say("Escolha um período válido (início até fim).");
+ const A=auto(s,e),n=months(s,e).length,y=n/12;
+ [["o_ipca","ipca"],["o_cpi","cpi"],["o_fx","fx"],["o_cdi","cdi"]].forEach(([id,k])=>$(id).placeholder=isNaN(A[k])?"informe":f2(A[k]*100));
+ const ov=(id,k)=>{const v=pn($(id).value);return isNaN(v)?A[k]:v/100};
+ const ipca=ov("o_ipca","ipca"),cpi=ov("o_cpi","cpi"),fx=ov("o_fx","fx"),cdi=ov("o_cdi","cdi");
+ let I=pn($("ini").value),F,C=0;
+ if($("modo").value=="val"){F=pn($("fin").value);C=pn($("apo").value);if(isNaN(C))C=0}else{const r=pn($("ret").value);F=I*(1+r/100)}
+ if(!(I>0)||isNaN(F))return say("Informe o patrimônio inicial e o final (ou a rentabilidade).");
+ const model=$("model").value,need=model=="comp"?[ipca,cpi,fx]:model=="ipca"?[ipca,fx,cpi]:[fx,cpi];
+ if(need.some(isNaN))return say("Faltam dados de referência para este período. Informe IPCA, CPI EUA e variação do dólar em “Premissas de mercado”.");
+ const nf=$("nf").checked,ni=$("ni").checked,base=I+C/2,gain=F-I-C;
+ const fee=((pn($("tx").value)||0)+(pn($("cu").value)||0))/100;
+ const custos=nf?0:fee*y*(I+F)/2,perf=nf?0:(pn($("pf").value)||0)/100*Math.max(0,gain-base*(isNaN(cdi)?0:cdi));
+ const pre=gain-custos-perf,ir=ni?0:Math.max(0,pre)*((pn($("irr").value)||0)/100),Fn=I+C+pre-ir;
+ const rb=gain/base,rl=(Fn-I-C)/base,prem=(pn($("prem").value)||0)/100,w=(pn($("w").value)||0)/100;
+ const dom=(1+ipca)*Math.pow(1+prem,y)-1,ext=(1+cpi)*(1+fx)-1;
+ let tilt=model=="comp"?(1-w)*dom+w*ext:model=="ipca"?dom:(pn($("tm").value)||0)/100;
+ const tiltAt=t=>(1+rl)/(1+t)-1,rr=tiltAt(tilt),rrI=tiltAt(ipca),ru=(1+rl)/(1+fx)-1,rru=(1+ru)/(1+cpi)-1;
+ const Freal=Fn/(1+tilt),meta=I*(1+tilt)+C*Math.sqrt(1+tilt),surplus=(Fn-meta)/(1+tilt);
+ const ann=r=>n>=12?Math.pow(1+r,1/y)-1:NaN,row=(a,r,sub)=>`<tr><td>${a}${sub?`<small>${sub}</small>`:""}</td><td class="${cl(r)}">${P(r)}</td><td>${P(ann(r))}</td></tr>`;
+ const wf=[["Retorno bruto",rb,1],["Custos e taxas",-(custos+perf)/base],["Imposto de renda",-ir/base],["Retorno líquido",rl,1],["Inflação (TILT)",rr-rl],["Retorno real",rr,1]];
+ const mx=Math.max(...wf.map(x=>Math.abs(x[1])),.0001);
+ const bars=wf.map(([a,v,t])=>{const wd=Math.abs(v)/mx*50;return `<div class="${t?"tot":""}">${a}</div><div class="bar"><i style="${v>=0?"left:50%":"right:50%"};width:${wd}%;background:var(--${v>=0?"up":"dn"})"></i></div><div class="${cl(v)}" style="text-align:right">${P(v)}</div>`}).join("");
+ const ok=rr>=0,txt=`${ok?"Seu patrimônio cresceu":"Seu patrimônio perdeu"} ${P(Math.abs(rr))} em poder de compra no período (${n} meses). Retorno nominal bruto: ${P(rb)}; líquido: ${P(rl)}; real: ${P(rr)}. Patrimônio final líquido: ${B(Fn)}.`;
+ out.innerHTML=`<div class="v ${ok?"up":"dn"}">${ok?"✔ Você enriqueceu de verdade":"✖ Você ficou mais pobre em termos reais"}: ${P(rr)}<small>${ok?"Ganho":"Perda"} real de ${B(Math.abs(surplus))} em poder de compra de ${s.split("-").reverse().join("/")}. Retorno líquido mínimo para empatar com a inflação patrimonial: ${P(ann(tilt))} a.a.${n<12?" (no período)":""}</small></div>
+ <div class="box"><h2 style="margin-top:0">Os 6 indicadores</h2><table><tr><th>Indicador</th><th>No período</th><th>Ao ano</th></tr>
+ ${row("Retorno nominal bruto",rb,"quanto a carteira valorizou")}${row("Retorno líquido",rl,"após custos, taxas e IR")}${row("Retorno real (TILT)",rr,"poder de compra do patrimônio")}${row("Retorno em USD",ru,"líquido, em dólares")}${row("Retorno real em USD",rru,"deflacionado pelo CPI EUA")}
+ <tr><td>Patrimônio real consolidado<small>final líquido em R$ de ${s.split("-").reverse().join("/")}</small></td><td class="${cl(surplus)}">${B(Freal)}</td><td>${P(Freal/(I+C/Math.sqrt(1+tilt))-1)}</td></tr></table></div>
+ <div class="box" style="margin-top:14px"><h2 style="margin-top:0">Da rentabilidade ao retorno real</h2><div class="wf">${bars}</div>
+ <p class="note">Patrimônio final bruto ${B(F)} → líquido ${B(Fn)} (custos ${B(custos+perf)}; IR ${B(ir)}). Para manter o poder de compra, o patrimônio final precisaria ser de ${B(meta)}.</p></div>
+ <div class="box" style="margin-top:14px"><h2 style="margin-top:0">Referências do período</h2><table><tr><th>Indicador</th><th>Acumulado</th><th>Retorno real líquido contra ele</th></tr>
+ <tr><td>IPCA</td><td>${P(ipca)}</td><td class="${cl(rrI)}">${P(rrI)}</td></tr><tr><td>Inflação patrimonial (TILT, modelo escolhido)</td><td>${P(tilt)}</td><td class="${cl(rr)}">${P(rr)}</td></tr>
+ <tr><td>TILT + 1 p.p. a.a.</td><td>${P((1+tilt)*Math.pow(1.01,y)-1)}</td><td class="${cl(tiltAt((1+tilt)*Math.pow(1.01,y)-1))}">${P(tiltAt((1+tilt)*Math.pow(1.01,y)-1))}</td></tr>
+ <tr><td>CPI EUA (em USD)</td><td>${P(cpi)}</td><td>—</td></tr><tr><td>USD/BRL</td><td>${P(fx)}</td><td>—</td></tr><tr><td>CDI (bruto)</td><td>${P(cdi)}</td><td>${isNaN(cdi)?"—":`bruto = ${f2(rb/cdi*100)}% do CDI`}</td></tr></table>
+ <div class="acts" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn p" id="cp">Copiar resumo</button><button class="btn" onclick="print()">Imprimir / PDF</button></div></div>`;
+ $("cp").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(txt);$("cp").textContent="Copiado ✓"};
+}
+function setModel(){const m=$("model").value;$("gw").hidden=$("gp").hidden=m=="man";$("gw").hidden=m!="comp";$("gm").hidden=m!="man";
+ if(m=="ipca"&&$("prem").value=="0,6")$("prem").value="1,1";if(m=="comp"&&$("prem").value=="1,1")$("prem").value="0,6"}
+document.addEventListener("input",()=>run());
+$("modo").onchange=()=>{$("g1").hidden=$("modo").value!="val";$("g2").hidden=$("modo").value=="val";run()};
+$("model").onchange=()=>{setModel();run()};
+$("th").onclick=()=>{const d=document.documentElement,t=d.dataset.theme=="dark"?"light":"dark";d.dataset.theme=t};
+document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+(async()=>{try{REF=await (await fetch("data/refs.json?t="+Date.now(),{cache:"no-store"})).json()}catch(e){}
+ if(REF&&REF.ipca){MAXM=[last(REF.ipca),last(REF.cpi),last(REF.fx)].filter(Boolean).sort()[0]||"";
+  if(MAXM){$("mf").value=$("mf").max=MAXM;let s=MAXM;for(let i=0;i<11;i++)s=prev(s);$("mi").value=s;
+   $("ds").textContent="Dados públicos até "+MAXM.split("-").reverse().join("/")}}
+ if(!$("mf").value){const d=new Date();d.setMonth(d.getMonth()-1);const k=mk(d.getFullYear(),d.getMonth()+1);$("mf").value=k;let s=k;for(let i=0;i<11;i++)s=prev(s);$("mi").value=s}
+ run()})();
+</script>
+</body>
+</html>
