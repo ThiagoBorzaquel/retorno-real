@@ -64,7 +64,8 @@ footer{color:var(--mu);font-size:12px;padding:20px 0 40px}
   <div class="r2"><div id="gw"><label>Despesas em moeda forte (%)</label><input id="w" inputmode="decimal" value="25"></div><div id="gp"><label>Prêmio s/ IPCA (p.p. a.a.)</label><input id="prem" inputmode="decimal" value="0,6"></div></div>
   <div id="gm" hidden><label>TILT acumulado no período (%)</label><input id="tm" inputmode="decimal" placeholder="ex.: 7,2"></div>
   <p class="note">O TILT oficial é da Turim (Carta 46). Aqui é uma aproximação com dados públicos; se você recebe o TILT, use "informado por mim".</p></details>
- <details><summary>Premissas de mercado (preenchidas automaticamente)</summary>
+ <details><summary>Premissas de mercado</summary>
+  <button class="btn" type="button" id="fill-market">Preencher automaticamente</button><span class="note" id="market-status" aria-live="polite"></span>
   <div class="r2"><div><label>IPCA no período (%)</label><input id="o_ipca" inputmode="decimal"></div><div><label>CPI EUA no período (%)</label><input id="o_cpi" inputmode="decimal"></div>
   <div><label>Variação USD/BRL (%)</label><input id="o_fx" inputmode="decimal"></div><div><label>CDI no período (%)</label><input id="o_cdi" inputmode="decimal"></div></div>
   <p class="note">Deixe em branco para usar os dados públicos (BCB, FRED/BLS, Yahoo Finance) ou digite para sobrescrever.</p></details>
@@ -204,6 +205,20 @@ function runImproved(){
  $("json").onclick=()=>download("retorno-real.json","application/json",JSON.stringify(report,null,2));
 }
 function download(name,type,text){const b=new Blob([text],{type:type+";charset=utf-8"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+ $("fill-market").onclick=()=>{
+  const s=$("mi").value,e=$("mf").value,status=$("market-status");
+  if(!s||!e||s>e){status.textContent=" Escolha um período válido primeiro.";return}
+  const refs=auto(s,e),fields=[["o_ipca","ipca"],["o_cpi","cpi"],["o_fx","fx"],["o_cdi","cdi"]];
+  const unavailable=[];
+  fields.forEach(([id,key])=>{
+   if(isFinite(refs[key]))$(id).value=(refs[key]*100).toLocaleString("pt-BR",{maximumFractionDigits:6});
+   else unavailable.push(key.toUpperCase());
+  });
+  status.textContent=unavailable.length
+   ?" Preenchido quando disponível; sem dados para: "+unavailable.join(", ")+"."
+   :" Premissas preenchidas para "+s+" a "+e+".";
+  runImproved();
+ };
 document.addEventListener("input",()=>runImproved());
 document.addEventListener("change",()=>runImproved());
 window.addEventListener("load",()=>setTimeout(runImproved,150));
